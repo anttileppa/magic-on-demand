@@ -1,0 +1,16 @@
+node_modules
+.settings
+config.json
+keycloak.json
+/.project
+/.tern-project
+/.externalToolBuilders/
+/.sass-cache/
+/nbproject
+coverage
+/.nyc_output
+.idea
+TODO.txt
+notifications
+test-reports
+.DS_Store
