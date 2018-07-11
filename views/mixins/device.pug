@@ -1,0 +1,53 @@
+mixin device(device, sources)
+  - var deviceSettings = device.settings || {}
+  .device(data-device=device.name)
+    .form-group.row
+      .col-12
+        h4
+          =device.title
+          if !connected
+            |
+            |(disconnected)
+    
+    each channel in device.channels
+      - var channelSettings = deviceSettings[channel.name] || {}
+      - var channelOptions = channelSettings.options || {}
+      - var channelSource = channelSettings.source
+      .channel(data-channel=channel.name)
+        .form-group.row
+          .col-6
+            label
+              =channel.title
+          .col-6
+            select.device-channel-source.form-control(data-device=device.name,data-channel=channel.name)
+              option None 
+              each source in sources 
+                option(value=source.name,selected=source.name == channelSource) 
+                  =source.title
+        .form-group.row
+          .col-12
+            each source in sources 
+              .source(data-source=source.name,style=source.name == channelSource ? '' : 'display: none')
+                each option in source.options
+                  - var optionValue = channelOptions[option.name]
+                  .option(data-option=option.name)
+                    .row
+                      .col-6
+                        b
+                          =option.title
+                      case option.type
+                        when 'number'
+                          .col-6
+                            input.source-option.form-control(type="range",min=option.min,max=option.max,value=optionValue)
+                        when 'select'
+                          .col-6
+                            select.source-option.form-control
+                              option
+                                |None
+                              each selectOption in option.options
+                                option(value=selectOption.name,selected=selectOption.name == optionValue) 
+                                  =selectOption.title
+
+
+            
+      

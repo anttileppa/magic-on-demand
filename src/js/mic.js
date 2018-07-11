@@ -53,7 +53,7 @@
     constructor() {
       super();
 
-      this.freqSocketClient = new WebSocketClient("freq-feed");
+      this.socketClient = new WebSocketClient("input", "mic", "source");
       this.audioAnalyser = new AudioAnalyser();
       this.frameCall = this.frame.bind(this);
       this.gain = 1;
@@ -63,7 +63,7 @@
     async start() {    
       await Promise.all([
         this.audioAnalyser.connectMic(),
-        this.freqSocketClient.connect()
+        this.socketClient.connect()
       ]);
 
       window.requestAnimationFrame(this.frameCall);
@@ -71,7 +71,7 @@
 
     frame() {
       this.audioAnalyser.getByteFrequencyData(this.frequencyBuffer);
-      this.freqSocketClient.send(this.frequencyBuffer);
+      this.socketClient.send(this.frequencyBuffer);
       window.requestAnimationFrame(this.frameCall);
     }
 

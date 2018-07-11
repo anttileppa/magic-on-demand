@@ -1,8 +1,15 @@
 extends layout/layout
+include mixins/device
 
 block head
-  script(defer="defer",src="/js/audiochannelcontroller.min.js",type="text/javascript")
   script(defer="defer",src="/js/index.min.js",type="text/javascript")
 
 block body
-  #container
+  #container.container
+    .row
+      .col-12
+        h2
+          |Devices
+
+    each device in devices
+      +device(device, sources)

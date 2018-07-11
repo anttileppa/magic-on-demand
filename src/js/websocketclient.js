@@ -3,17 +3,19 @@
 
   class WebSocketClient extends EventEmitter {
 
-    constructor(type) {
+    constructor(type, device, channel) {
       super();
 
       this.type = type;
+      this.device = device;
+      this.channel = channel;
     }
 
     connect() {
       console.log("WebSocket Connecting...");
   
       return new Promise((resolve, reject) => {
-        this.url = `ws://${window.location.host}/${this.type}`;
+        this.url = `ws://${window.location.host}/${this.type}/${this.device}/${this.channel}`;
         window.location.href.replace("http", "ws");
         this.webSocket = this.createWebSocket(`${this.url}`);
 

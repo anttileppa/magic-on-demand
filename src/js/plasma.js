@@ -9,11 +9,14 @@
   class PlasmaVisualizer extends Device {
 
     constructor() {
-      super({
-        freqFeedActive: true,
-        freqHighCut: 5
-      });
+      super({});
 
+      this.blobinessSocket = new WebSocketClient("output", "plasma", "blobiness");
+      this.brightnessSocket = new WebSocketClient("output", "plasma", "brightness");
+
+      this.blobinessSocket.on("binary-message", this.onBlobinessSocketBinaryMessage.bind(this));
+      this.brightnessSocket.on("binary-message", this.onBrightnessSocketBinaryMessage.bind(this));
+ 
       this.sketch = Sketch.create({
         container: document.getElementById('container'),
         type: Sketch.WEB_GL,
@@ -28,6 +31,10 @@
       this.sketch.updateUniforms = this.updateUniforms.bind(this);
       this.sketch.draw = this.draw.bind(this);
       this.sketch.resize = this.resize.bind(this);
+    }
+
+    async start() {
+      await Promise.all([this.blobinessSocket.connect(), this.brightnessSocket.connect()]);
     }
 
     setup () {
@@ -87,9 +94,9 @@
     }
 
     draw () {
-      this.setBrightness(this.getFreqLow() / 100.0);
-      this.setBlobiness(1 + (this.getFreqHigh() / 128.0));
-      this.sketch.updateUniforms();
+      // this.setBrightness(this.getFreqLow() / 100.0);
+      // this.setBlobiness(1 + (this.getFreqHigh() / 128.0));
+      // this.sketch.updateUniforms();
 
       this.sketch.uniform1f(this.sketch.shaderProgram.uniforms.millis, this.sketch.millis + 5000);
       this.sketch.clear(this.sketch.COLOR_BUFFER_BIT | this.sketch.DEPTH_BUFFER_BIT);
@@ -131,6 +138,14 @@
 
     setEnergy(energy) {
       this.sketch.energy = energy;
+    }
+
+    onBlobinessSocketBinaryMessage(data) {
+      console.log("onBlobinessSocketBinaryMessage", data);
+    }
+
+    onBrightnessSocketBinaryMessage(data) {
+      console.log("onBrightnessSocketBinaryMessage", data);
     }
     
   }

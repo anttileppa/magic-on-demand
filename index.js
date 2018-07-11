@@ -9,7 +9,8 @@
   const app = express();
   const http = require("http");
   const httpServer = http.Server(app);
-
+  const webSocketServer = require("./websocketserver");
+  
   app.set("views", path.join(__dirname, "views"));
   app.set("view engine", "pug");
   
@@ -22,10 +23,10 @@
   }));
   
   require("./routes")(app);
-  require("./websocketserver")(httpServer);
 
   exports.startServer = (callback) => {
     httpServer.listen(app.get("port"), callback);
+    webSocketServer.start(httpServer);
   };
   
 })();
