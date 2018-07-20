@@ -61,6 +61,13 @@
             "name": "loudness",
             "title": "Loudness"
           }]
+        },
+        {
+          "type": "number",
+          "name": "volume",
+          "title": "Volume",
+          "min": 0,
+          "max": 100
         }
       ]);
     }

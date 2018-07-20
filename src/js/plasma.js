@@ -96,7 +96,7 @@
     draw () {
       // this.setBrightness(this.getFreqLow() / 100.0);
       // this.setBlobiness(1 + (this.getFreqHigh() / 128.0));
-      // this.sketch.updateUniforms();
+      this.sketch.updateUniforms();
 
       this.sketch.uniform1f(this.sketch.shaderProgram.uniforms.millis, this.sketch.millis + 5000);
       this.sketch.clear(this.sketch.COLOR_BUFFER_BIT | this.sketch.DEPTH_BUFFER_BIT);
@@ -141,11 +141,17 @@
     }
 
     onBlobinessSocketBinaryMessage(data) {
-      console.log("onBlobinessSocketBinaryMessage", data);
+      if (data) {
+        const array = new Uint8Array(data);
+        this.setBrightness(array[0] / 100.0);
+      }
     }
 
     onBrightnessSocketBinaryMessage(data) {
-      console.log("onBrightnessSocketBinaryMessage", data);
+      if (data) {
+        const array = new Uint8Array(data);
+        this.setBlobiness(1 + (array[0] / 128.0));
+      }
     }
     
   }

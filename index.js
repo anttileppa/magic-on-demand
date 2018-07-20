@@ -25,7 +25,12 @@
   require("./routes")(app);
 
   exports.startServer = (callback) => {
-    httpServer.listen(app.get("port"), callback);
+    const port = app.get("port");
+    
+    httpServer.listen(port, () => {
+      callback(port);
+    });
+
     webSocketServer.start(httpServer);
   };
   

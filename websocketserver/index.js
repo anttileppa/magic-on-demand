@@ -82,15 +82,17 @@
           _.forEach(micDevice.settings, (settings, channel) => {
             if (settings.source === "mic") {
               const micChannel = ((settings.options || {}).channel) || 'None';
+              const volume = (((settings.options || {}).volume) || 100) / 100;
+              
               switch (micChannel) {
                 case "bass":
-                  this.sendMicData(micDevice, channel, bass);
+                  this.sendMicData(micDevice, channel, Buffer.from([bass * volume]));
                 break;
                 case "treble":
-                  this.sendMicData(micDevice, channel, treble);
+                  this.sendMicData(micDevice, channel, Buffer.from([treble * volume]));
                 break;
                 case "loudness":
-                  this.sendMicData(micDevice, channel, loudness);
+                  this.sendMicData(micDevice, channel, Buffer.from([loudness * volume]));
                 break;  
               } 
             }
@@ -101,9 +103,7 @@
 
     sendMicData(device, channel, data) {
       const connections = this.server.getOutputConnectionsByDeviceAndChannel(device.name, channel);
-
       connections.forEach((connection) => {
-        console.log("Send data connection", connection);
         connection.sendBinary(data);
       });
     }
