@@ -2,7 +2,8 @@
   "use strict";
 
   const EventEmitter = require("events");
-
+  require(`${__dirname}/handlers`);
+  
   class Source extends EventEmitter {
     
     constructor(name, title, options) {
