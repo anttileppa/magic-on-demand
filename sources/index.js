@@ -46,8 +46,8 @@
 
   class MicSource extends Source {
 
-    constructor() {
-      super("mic", "Mic", [
+    constructor(deviceName, deviceTitle) {
+      super(deviceName, deviceTitle, [
         {
           "type": "select",
           "name": "channel",
@@ -80,7 +80,8 @@
     constructor() {
       this.sources = [];
       this.addSource(new ManualSource());
-      this.addSource(new MicSource());
+      this.addSource(new MicSource("mic", "Mic"));
+      this.addSource(new MicSource("mic-smooth", "Mic smooth"));
     }
 
     addSource(source) {

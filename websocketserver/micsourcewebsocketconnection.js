@@ -3,16 +3,17 @@
 
   const _ = require("lodash");
   const WebSocketConnection = require(`${__dirname}/websocketconnection`);
-  const micSourceHandler = require(`${__dirname}/../sources/handlers/mic-source-handler`);
+  const MicSourceFeedHandler = require(`${__dirname}/../sources/handlers/mic-source-handler`);
 
   class MicSourceWebSocketConnection extends WebSocketConnection {
 
-    constructor(server, connection) {
+    constructor(server, connection, deviceName) {
       super(server, connection);
+      this.micSourceHandler = new MicSourceFeedHandler(deviceName);
     }
 
     async onBinaryMessage(sourceData) {
-      micSourceHandler.sendMicData(sourceData); 
+      this.micSourceHandler.sendMicData(sourceData); 
     }
   }
 

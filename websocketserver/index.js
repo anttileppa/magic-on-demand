@@ -78,11 +78,12 @@
 
       if (type === "input") {
         switch (device) {
+          case "mic-smooth":
           case "mic":
-            this.addDevice(type, device, channel, new MicSourceWebSocketConnection(this, request.accept("echo-protocol", request.origin)));
+            this.addDevice(type, device, channel, new MicSourceWebSocketConnection(this, request.accept("echo-protocol", request.origin), device));
           break;
           default:
-            console.error(`Unknown input device ${name}`);
+            console.error(`Unknown input device ${device}`);
           break;
         }  
       } else if (type === "output") {

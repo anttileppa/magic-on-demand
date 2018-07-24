@@ -7,13 +7,14 @@
   
   class MicSourceFeedHandler extends AbstractSourceHandler {
 
-    constructor() {
+    constructor(deviceName) {
       super();
+      this.deviceName = deviceName;
       this.freqHighCut = 5;
     }
 
     async sendMicData(sourceData) {
-      const micDevices = await devices.listDevicesWithSettingsBySource("mic");
+      const micDevices = await devices.listDevicesWithSettingsBySource(this.deviceName);
       if (micDevices.length) {
         const bass = this.getFreqLow(sourceData);
         const treble = this.getFreqHigh(sourceData);
@@ -21,22 +22,20 @@
 
         micDevices.forEach((micDevice) => {
           _.forEach(micDevice.settings, (settings, channel) => {
-            if (settings.source === "mic") {
-              const micChannel = ((settings.options || {}).channel) || 'None';
-              const volume = (((settings.options || {}).volume) || 100) / 100;
-              
-              switch (micChannel) {
-                case "bass":
-                  this.sendData(micDevice, channel, Buffer.from([bass * volume]));
-                break;
-                case "treble":
-                  this.sendData(micDevice, channel, Buffer.from([treble * volume]));
-                break;
-                case "loudness":
-                  this.sendData(micDevice, channel, Buffer.from([loudness * volume]));
-                break;  
-              } 
-            }
+            const micChannel = ((settings.options || {}).channel) || 'None';
+            const volume = (((settings.options || {}).volume) || 100) / 100;
+            
+            switch (micChannel) {
+              case "bass":
+                this.sendData(micDevice, channel, Buffer.from([bass * volume]));
+              break;
+              case "treble":
+                this.sendData(micDevice, channel, Buffer.from([treble * volume]));
+              break;
+              case "loudness":
+                this.sendData(micDevice, channel, Buffer.from([loudness * volume]));
+              break;  
+            } 
           });
         });
       }
@@ -82,6 +81,6 @@
 
   }
 
-  module.exports = new MicSourceFeedHandler();
+  module.exports = MicSourceFeedHandler;
 
 })();
