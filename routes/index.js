@@ -12,6 +12,8 @@
       app.get("/plasma", this.catchAsync(this.plasmaGet.bind(this)));
       app.get("/freq", this.catchAsync(this.freqGet.bind(this)));
       app.post("/ajax/updateDeviceSource", this.catchAsync(this.ajaxUpdateDeviceSourcePost.bind(this)));
+      app.post("/ajax/saveSettings", this.catchAsync(this.ajaxSaveSettingsPost.bind(this)));
+      app.post("/ajax/loadSettings", this.catchAsync(this.ajaxLoadSettingsPost.bind(this)));
     }
 
     /**
@@ -23,7 +25,8 @@
     async indexGet(req, res) {
       res.render("index", { 
         "devices": await devices.getDevicesAsJson(),
-        "sources": await sources.getSourcesAsJson()
+        "sources": await sources.getSourcesAsJson(),
+        "settings": await devices.loadSettingSavedNames()
       });
     }
 
@@ -60,6 +63,18 @@
     ajaxUpdateDeviceSourcePost(req, res) {
       const body = req.body;
       devices.updateDeviceSource(body.device, body.channel, body.source, body.option, body.value);
+      res.send("ok");
+    }
+
+    ajaxSaveSettingsPost(req, res) {
+      const body = req.body;
+      devices.saveSettings(body.name);
+      res.send("ok");
+    }
+
+    ajaxLoadSettingsPost(req, res) {
+      const body = req.body;
+      devices.loadSettings(body.name);
       res.send("ok");
     }
 

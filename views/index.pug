@@ -5,11 +5,35 @@ block head
   script(defer="defer",src="/js/index.min.js",type="text/javascript")
 
 block body
-  #container.container
+  #container.container.mt-2
     .row
       .col-12
         h2
+          |Settings
+    .row
+      .col-12
+        .row
+          .col-12
+            select.form-control.load-settings-name
+              each setting in settings
+                option(value=setting)
+                  =setting
+        .row
+          .col-12.mt-2.mb-2
+            a.btn.btn-large.btn-info.btn-block.load-settings
+              |Load
+    .row
+      .col-12
+        .row
+          .col-12
+            input.form-control.save-settings-name
+        .row
+          .col-12.mt-2.mb-2
+            a.btn.btn-large.btn-success.btn-block.save-settings
+              |Save
+    .row.mt-2
+      .col-12
+        h2
           |Devices
-
     each device in devices
       +device(device, sources)

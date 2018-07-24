@@ -108,6 +108,36 @@
       this.addDevice(new SpotDevice(3));
       this.addDevice(new SpotDevice(4));
     }
+
+    async loadSettingSavedNames() {
+      const value = await this.redisClient.getAsync("settings");
+      const settings = value ? JSON.parse(value) : {};
+      return Object.keys(settings);
+    }
+
+    async loadSettings(name) {
+      const value = await this.redisClient.getAsync("settings");
+      const settings = (value ? JSON.parse(value) : {})[name] || {};
+
+      const settingDevices = Object.keys(settings);
+      for (let i = 0; i < settingDevices.length; i++) {
+        const settingDevice = settingDevices[i];
+        await this.saveDeviceSettings(settingDevice, settings[settingDevice]);
+      }
+    }
+
+    async saveSettings(name) {
+      const value = await this.redisClient.getAsync("settings");
+      const settings = value ? JSON.parse(value) : {};
+      settings[name] = {};
+
+      for (let i = 0; i < this.devices.length; i++) {
+        const deviceName = this.devices[i].getName();
+        settings[name][deviceName] = await this.loadDeviceSettings(deviceName); 
+      }
+
+      await this.redisClient.setAsync("settings", JSON.stringify(settings));
+    }
     
     async updateDeviceSource(device, channel, source, option, value) {
       const settings = await this.loadDeviceSettings(device);

@@ -8,6 +8,9 @@
       $(document).on("chage", ".source-option", this.onSourceOptionChange.bind(this));
       
       $(".device-channel-source").change(this.onDeviceChannelSourceChange.bind(this));
+
+      $(".save-settings").click(this.onSaveSettingsClick.bind(this));
+      $(".load-settings").click(this.onLoadSettingsClick.bind(this));
     }
 
     async start() {
@@ -32,6 +35,22 @@
     onSocketUtfMessage(utfData) {
       console.log(utfData);
       console.log(JSON.parse(utfData));
+    }
+
+    async onSaveSettingsClick(event) {
+      await postJSON("/ajax/saveSettings", {
+        name: $(".save-settings-name").val()
+      });
+
+      window.location.reload(true);
+    }
+
+    async onLoadSettingsClick(event) {
+      await postJSON("/ajax/loadSettings", {
+        name: $(".load-settings-name").val()
+      });
+
+      window.location.reload(true);
     }
 
     onDeviceChannelSourceChange(event) {
