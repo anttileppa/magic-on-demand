@@ -72,9 +72,9 @@
 
     createWebSocket(url) {
       if ((typeof window.WebSocket) !== 'undefined') {
-        return new WebSocket(url,"echo-protocol");
+        return new WebSocket(url, "echo-protocol");
       } else if ((typeof window.MozWebSocket) !== 'undefined') {
-        return new MozWebSocket(url,"echo-protocol");
+        return new MozWebSocket(url, "echo-protocol");
       }
     }
 

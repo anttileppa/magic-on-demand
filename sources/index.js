@@ -106,31 +106,3 @@
   module.exports = new Sources();
 
 })();
-/**
-
-[
-  {
-    "name": "none",
-    "title": "Off"
-  },
-  {
-    "name": "manual",
-    "title": "Manual"
-  },
-  {
-    "name": "range",
-    "title": "Manual range"
-  },
-  {
-    "name": "freq-low",
-    "title": "Mic - Bass"
-  },
-  {
-    "name": "freq-high",
-    "title": "Mic - Treble"
-  },
-  {
-    "name": "freq-avg",
-    "title": "Mic - Loudness"
-  }
-]**/

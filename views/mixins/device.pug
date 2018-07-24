@@ -5,9 +5,6 @@ mixin device(device, sources)
       .col-12
         h4
           =device.title
-          if !connected
-            |
-            |(disconnected)
     
     each channel in device.channels
       - var channelSettings = deviceSettings[channel.name] || {}

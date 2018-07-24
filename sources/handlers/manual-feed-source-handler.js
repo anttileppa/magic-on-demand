@@ -2,12 +2,13 @@
   "use strict";
 
   const _ = require("lodash");
-  const webSocketServer = require(`${__dirname}/../../websocketserver`);
+  const AbstractSourceHandler = require(`${__dirname}/abstract-source-handler`);
   const devices = require(`${__dirname}/../../devices`);
-
-  class ManualSourceFeedHandler {
+  
+  class ManualSourceFeedHandler extends AbstractSourceHandler {
 
     constructor() {
+      super();
       setInterval(this.sendUpdates.bind(this), 200);
     }
 
@@ -17,19 +18,12 @@
         manualDevices.forEach((manualDevice) => {
           _.forEach(manualDevice.settings, (settings, channel) => {
             const value = ((settings.options || {}).value) || 0;
-            this.sendManualData(manualDevice, channel, Buffer.from([value]));
+            this.sendData(manualDevice, channel, Buffer.from([value]));
           });
         });
       }
     }
 
-    sendManualData(device, channel, data) {
-      const connections = webSocketServer.getOutputConnectionsByDeviceAndChannel(device.name, channel);
-      connections.forEach((connection) => {
-        connection.sendBinary(data);
-      });
-    }
-    
   }
 
   module.exports = new ManualSourceFeedHandler();

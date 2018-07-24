@@ -51,6 +51,31 @@
     constructor() {
       super("leds", "Leds", [
         {
+          "name": "purple-wave",
+          "title": "Purple Wave"
+        },
+        {
+          "name": "red-twinkle",
+          "title": "Red twinkle"
+        },
+        {
+          "name": "blue-twinkle",
+          "title": "Blue twinkle"
+        }
+      ]);
+    }
+
+  }
+
+  class SpotDevice extends Device {
+
+    constructor(index) {
+      super(`spot-${index}`, `Spot ${index}`, [
+        {
+          "name": "master",
+          "title": "Master",
+        },
+        {
           "name": "red",
           "title": "Red"
         },
@@ -61,6 +86,10 @@
         {
           "name": "blue",
           "title": "Blue"
+        },
+        {
+          "name": "white",
+          "title": "White"
         }
       ]);
     }
@@ -74,6 +103,10 @@
       this.devices = [];
       this.addDevice(new LedsDevice());
       this.addDevice(new PlasmaDevice());
+      this.addDevice(new SpotDevice(1));
+      this.addDevice(new SpotDevice(2));
+      this.addDevice(new SpotDevice(3));
+      this.addDevice(new SpotDevice(4));
     }
     
     async updateDeviceSource(device, channel, source, option, value) {
@@ -154,11 +187,3 @@
   module.exports = new Devices();
 
 })();
-
-/**
-          
-    "flash": ["source"],
-    "spot-1": ["source"],
-    "spot-2": ["source"],
-    "spot-3": ["source"]
- */
